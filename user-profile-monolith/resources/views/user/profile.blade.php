@@ -11,6 +11,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+            @if (session('password_changed'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span>{{ session('password_changed') }}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <div class="card">
                 <div class="card-header">
                     <h2 class="text-center">Profile Page</h2>
@@ -41,6 +47,7 @@
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary w-100">Save</button>
                         </div>
+                        <a href="{{ route('profile.changePasswordPage') }}">Change Password</a>
                     </form>
                 </div>
             </div>

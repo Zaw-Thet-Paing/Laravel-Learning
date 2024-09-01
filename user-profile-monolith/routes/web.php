@@ -15,5 +15,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::get('/profile/changePassword', [ProfileController::class, 'changePassword'])->name('profile.changePasswordPage');
+    Route::post('/profile/changePassword', [ProfileController::class, 'updatePassword'])->name('profile.changePassword');
+
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

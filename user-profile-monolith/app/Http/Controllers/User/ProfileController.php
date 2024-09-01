@@ -7,6 +7,7 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -25,6 +26,28 @@ class ProfileController extends Controller
         $profile->update();
 
         return redirect()->route('profile.index')->with('profile_updated', 'Profile Update');
+
+    }
+
+    public function changePassword()
+    {
+        return view('user.changePassword');
+    }
+
+    public function updatePassword()
+    {
+        $oldPassword = request('oldPassword');
+        $confirmPassword = request('confirmPassword');
+        $user = Auth::user();
+
+        if(!Hash::check($oldPassword, $user->password)){
+            return redirect()->route('profile.changePasswordPage')->with('password_update_failed', 'Old password didn\'t match');
+        }
+
+        $user->password = Hash::make($confirmPassword);
+        $user->update();
+
+        return redirect()->route('profile.index')->with('password_changed', 'Password changed');
 
     }
 
