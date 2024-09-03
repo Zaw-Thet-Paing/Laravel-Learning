@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\User\HomeController as UserHomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +23,18 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+// admin side
 Route::middleware(['auth', 'admin'])->group(function(){
-    Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
+});
+
+// user side
+Route::middleware(['auth', 'user'])->group(function(){
+    Route::get('/user/dashboard', [UserHomeController::class, 'index'])->name('user.dashboard');
+});
+
+// access from both users
+Route::middleware('auth')->group(function(){
+    Route::get('/products', [ProductController::class, 'index'])->name('product.index');
+    Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
 });
