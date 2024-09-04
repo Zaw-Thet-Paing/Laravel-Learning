@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('User Dashboard') }}
+            {{ __('Admin Dashboard') }}
         </h2>
     </x-slot>
 
@@ -12,7 +12,7 @@
                     <div class="mb-2 d-flex justify-content-between">
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Back</a>
                         @if (Auth::user()->user_type === 'admin')
-                        <a href="" class="btn btn-primary">Create</a>
+                        <a href="{{ route('category.create') }}" class="btn btn-primary">Create</a>
                         @endif
                     </div>
                     <div class="card">
@@ -37,8 +37,8 @@
                                             <td>{{ $category->name }}</td>
                                             @if (Auth::user()->user_type === 'admin')
                                             <td>
-                                                <a href="" class="btn btn-secondary" style="width: 80px">Edit</a>
-                                                <a href="" class="btn btn-danger" style="width: 80px">Delete</a>
+                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-secondary" style="width: 80px">Edit</a>
+                                                <a href="{{ route('category.destroy', $category->id) }}" class="btn btn-danger" style="width: 80px" onclick="return confirm('Are you sure?')">Delete</a>
                                             </td>
                                             @endif
                                         </tr>

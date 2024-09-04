@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -22,7 +23,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.category.create');
     }
 
     /**
@@ -30,7 +31,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required|string'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('category.create')->with('category_create_failed', $validator->errors());
+        }
+
+        $category = new Category();
+        $category->name = $request->name;
+        $category->save();
+
+        return redirect()->route('category.index')->with('category_created', 'Category Created');
+
     }
 
     /**
@@ -46,7 +60,8 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return view('admin.category.edit', compact('category'));
     }
 
     /**
@@ -54,7 +69,22 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required|string'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('category.create')->with('category_edit_failed', $validator->errors());
+        }
+
+        $category = Category::findOrFail($id);
+
+        $category->name = $request->name;
+
+        $category->update();
+
+        return redirect()->route('category.index')->with('category_updated', 'Category Updated');
     }
 
     /**
@@ -62,6 +92,8 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->delete();
+        return redirect()->route('category.index')->with('category_deleted', 'Category Deleted!');
     }
 }

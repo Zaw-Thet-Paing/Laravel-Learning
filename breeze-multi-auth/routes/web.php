@@ -26,6 +26,18 @@ require __DIR__.'/auth.php';
 // admin side
 Route::middleware(['auth', 'admin'])->group(function(){
     Route::get('/admin/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
+
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('category.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::post('/categories/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::get('/categories/{id}/delete', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+    Route::get('/products/create', [ProductController::class, 'create'])->name('product.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('product.store');
+    Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+    Route::post('/products/{id}', [ProductController::class, 'update'])->name('product.update');
+    Route::get('/products/{id}/delete', [ProductController::class, 'destroy'])->name('product.destroy');
 });
 
 // user side

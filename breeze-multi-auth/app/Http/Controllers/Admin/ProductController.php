@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -22,7 +24,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('admin.product.create', compact('categories'));
     }
 
     /**
@@ -30,7 +33,24 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required|string',
+            'price'=> 'required',
+            'category_id'=> 'required'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('product.create')->with('product_create_failed', $validator->errors());
+        }
+
+        $product = new Product();
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->save();
+
+        return redirect()->route('product.index')->with('product_created', 'Product Created');
+
     }
 
     /**
@@ -46,7 +66,9 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $categories = Category::all();
+        return view('admin.product.edit', compact('product', 'categories'));
     }
 
     /**
@@ -54,7 +76,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required|string',
+            'price'=> 'required',
+            'category_id'=> 'required'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('product.create')->with('product_edit_failed', $validator->errors());
+        }
+
+        $product = Product::findOrFail($id);
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->update();
+
+        return redirect()->route('product.index')->with('product_updated', 'Product Updated');
     }
 
     /**
@@ -62,6 +100,9 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->route('product.index')->with('product_deleted', 'Product Deleted');
     }
 }
