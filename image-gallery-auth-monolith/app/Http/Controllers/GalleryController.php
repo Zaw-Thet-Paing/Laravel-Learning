@@ -63,6 +63,9 @@ class GalleryController extends Controller
     public function show(string $id)
     {
         $image = Image::findOrFail($id);
+        if(Auth::user()->id !== $image->user_id){
+            return redirect()->route('gallery.index')->with('error', 'Unauthorized access to edit this image.');
+        }
         return view('gallery.image', compact('image'));
     }
 
@@ -71,7 +74,12 @@ class GalleryController extends Controller
      */
     public function edit(string $id)
     {
-        $image = Image::find($id);
+        $image = Image::findOrFail($id);
+
+        if(Auth::user()->id !== $image->user_id){
+            return redirect()->route('gallery.index')->with('error', 'Unauthorized access to edit this image.');
+        }
+
         return view('gallery.edit', compact('image'));
     }
 
@@ -83,9 +91,14 @@ class GalleryController extends Controller
 
         $image = Image::findOrFail($id);
 
+        if(Auth::user()->id !== $image->user_id){
+            return redirect()->route('gallery.index')->with('error', 'Unauthorized access to edit this image.');
+        }
+
         $validator = Validator::make($request->all(), [
             'title'=> 'required',
-            'description'=> 'required'
+            'description'=> 'required',
+            'photo'=> 'nullable|file'
         ]);
 
         if($validator->fails()){
