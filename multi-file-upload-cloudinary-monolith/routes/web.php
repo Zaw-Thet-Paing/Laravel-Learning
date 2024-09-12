@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,14 @@ require __DIR__.'/auth.php';
 // admin dashboard
 Route::middleware(['auth', 'admin'])->group(function(){
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+
+    // Category
+    Route::get('/categories', [CategoryController::class, 'index'])->name('admin.category.index');
+    Route::get('/catgories/create', [CategoryController::class, 'create'])->name('admin.category.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('admin.category.store');
+    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
+    Route::post('/categories/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+    Route::get('/categories/{id}/delete', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
 });
 
 // user
