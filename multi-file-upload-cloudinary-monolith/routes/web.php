@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
@@ -18,3 +20,14 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+// admin dashboard
+Route::middleware(['auth', 'admin'])->group(function(){
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+});
+
+// user
+Route::middleware(['auth', 'user'])->group(function(){
+    Route::get('/', [UserController::class, 'index'])->name('user.home');
+});
