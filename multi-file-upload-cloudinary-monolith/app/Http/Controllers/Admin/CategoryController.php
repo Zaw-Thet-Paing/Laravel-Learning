@@ -36,7 +36,9 @@ class CategoryController extends Controller
         ]);
 
         if($validator->fails()){
-            return redirect()->route('admin.category.create')->with('create_fail', $validator->errors());
+            return redirect()->route('admin.category.create')
+                                ->withErrors($validator) // Flash validation errors
+                                ->with('create_fail', 'There were some issues with your input.');
         }
 
         Category::create([
@@ -75,7 +77,10 @@ class CategoryController extends Controller
         ]);
 
         if($validator->fails()){
-            return redirect()->route('admin.category.edit', $category->id)->with('edit_fail', $validator->errors());
+            return redirect()->route('admin.category.edit', $category->id)
+                                ->withErrors($validator)
+                                ->with('edit_fail', 'There were some issues with your input.')
+                                ->withInput();
         }
 
         $category->name = $request->name;

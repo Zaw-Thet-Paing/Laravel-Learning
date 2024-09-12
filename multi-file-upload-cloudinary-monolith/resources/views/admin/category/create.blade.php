@@ -23,7 +23,12 @@
                         @csrf
                         <div class="mb-3">
                             <label for="" class="mb-2">Category Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="Enter category name..." autofocus>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Enter category name..." autofocus>
+                            @error('name')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <input type="submit" value="Create Category" class="btn btn-primary">
