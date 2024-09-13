@@ -25,7 +25,6 @@
                                 <td>ID</td>
                                 <td>Name</td>
                                 <td>Price</td>
-                                <td>Image</td>
                                 <td>Actions</td>
                             </tr>
                         </thead>
@@ -36,12 +35,7 @@
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->price }}</td>
                                 <td>
-                                    @foreach ($product->photos as $photo)
-                                        <img src="{{ $photo->image_url }}" alt="" class="img-thumbnail" style="width: 100px">
-                                    @endforeach
-                                </td>
-                                <td>
-                                    <a href="" class="btn btn-primary" style="width: 80px">Details</a>
+                                    <a href="{{ route('admin.product.show', $product->id) }}" class="btn btn-primary" style="width: 80px">Details</a>
                                     <a href="" class="btn btn-secondary" style="width: 80px">Edit</a>
                                     <a href="" class="btn btn-danger" style="width: 80px">Delete</a>
                                 </td>

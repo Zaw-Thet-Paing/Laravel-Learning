@@ -18,8 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('photos')->get();
-        // dd($products->toArray());
+        $products = Product::all();
         return view('admin.product.index', compact('products'));
     }
 
@@ -41,7 +40,8 @@ class ProductController extends Controller
             'name'=> 'required|string',
             'price'=> 'required',
             'description'=> 'required',
-            'photo'=> 'required|file',
+            'photos'=> 'required|array',
+            'photos.*'=> 'required|file',
             'category_id'=> 'required|integer|exists:categories,id'
         ]);
 
@@ -49,8 +49,8 @@ class ProductController extends Controller
             return redirect()->route('admin.product.create')->with('create_fail', $validator->errors());
         }
 
-        $cloudinaryImage = $request->file('photo')->storeOnCloudinary('products');
-        $url = $cloudinaryImage->getSecurePath();
+        // $cloudinaryImage = $request->file('photo')->storeOnCloudinary('products');
+        // $url = $cloudinaryImage->getSecurePath();
         // $public_id = $cloudinaryImage->getPublicId();
         // $response = cloudinary()->upload($request->file('photo')->getRealPath())->getSecurePath();
 
@@ -63,10 +63,15 @@ class ProductController extends Controller
             'user_id'=> Auth::user()->id
         ]);
 
-        Photo::create([
-            'image_url'=> $url,
-            'product_id'=> $product->id
-        ]);
+        foreach($request->file('photos') as $photo){
+            $cloudinaryImage = $photo->storeOnCloudinary('products');
+            $url = $cloudinaryImage->getSecurePath();
+
+            Photo::create([
+                'image_url'=> $url,
+                'product_id'=> $product->id
+            ]);
+        }
 
         return redirect()->route('admin.product.index')->with('created', 'Product Created');
 
@@ -77,7 +82,10 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::with(['photos', 'category'])->findOrFail($id);
+        // dd($product->toArray());
+        return view('admin.product.show', compact('product'));
+
     }
 
     /**
