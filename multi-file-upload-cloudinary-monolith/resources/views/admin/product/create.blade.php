@@ -6,7 +6,7 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
             @if (session('create_fail'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ session('create_fail') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -23,11 +23,11 @@
                         @csrf
                         <div class="mb-3">
                             <label for="">Name</label>
-                            <input type="text" name="name" class="form-control">
+                            <input type="text" name="name" class="form-control" placeholder="Enter product name..">
                         </div>
                         <div class="mb-3">
                             <label for="">Price</label>
-                            <input type="text" name="price" class="form-control">
+                            <input type="text" name="price" class="form-control" placeholder="Enter product price...">
                         </div>
                         <div class="mb-3">
                             <label for="">Category</label>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="">Description</label>
-                            <textarea name="description" class="form-control"></textarea>
+                            <textarea name="description" class="form-control" placeholder="Enter product description..."></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="">Product Images</label>

@@ -66,10 +66,12 @@ class ProductController extends Controller
         foreach($request->file('photos') as $photo){
             $cloudinaryImage = $photo->storeOnCloudinary('products');
             $url = $cloudinaryImage->getSecurePath();
+            $public_id = $cloudinaryImage->getPublicId();
 
             Photo::create([
                 'image_url'=> $url,
-                'product_id'=> $product->id
+                'product_id'=> $product->id,
+                'public_id'=> $public_id
             ]);
         }
 
@@ -93,7 +95,9 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::with(['category', 'photos'])->findOrFail($id);
+        $categories = Category::all();
+        return view('admin.product.edit', compact('product', 'categories'));
     }
 
     /**
@@ -101,7 +105,45 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $product = Product::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required|string',
+            'price'=> 'required',
+            'description'=> 'required',
+            'photos'=> 'nullable|array',
+            'photos.*'=> 'nullable|file',
+            'category_id'=> 'required|integer|exists:categories,id'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('admin.product.create')->with('edit_fail', $validator->errors());
+        }
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->category_id = $request->category_id;
+        $product->update();
+
+        // dd($request->hasFile('photos'));
+        if($request->hasFile('photos')){
+            foreach($request->file('photos') as $photo){
+                $cloudinaryImage = $photo->storeOnCloudinary('products');
+                $url = $cloudinaryImage->getSecurePath();
+                $public_id = $cloudinaryImage->getPublicId();
+
+                Photo::create([
+                    'image_url'=> $url,
+                    'product_id'=> $product->id,
+                    'public_id'=> $public_id
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.product.index')->with('updated', 'Product Updated');
+
     }
 
     /**
@@ -109,6 +151,19 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        foreach($product->photos as $photo){
+            Cloudinary::destroy($photo->public_id);
+        }
+        $product->delete();
+        return redirect()->route('admin.product.index')->with('deleted', 'Product Deleted');
+    }
+
+    public function deletePhoto(string $id){
+        $photo = Photo::findOrFail($id);
+        // dd($photo);
+        Cloudinary::destroy($photo->public_id);
+        $photo->delete();
+        return redirect()->back();
     }
 }
