@@ -23,28 +23,53 @@
                         @csrf
                         <div class="mb-3">
                             <label for="">Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="Enter product name..">
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Enter product name..">
+                            @error('name')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="">Price</label>
-                            <input type="text" name="price" class="form-control" placeholder="Enter product price...">
+                            <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" placeholder="Enter product price...">
+                            @error('price')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="">Category</label>
-                            <select name="category_id" class="form-control">
+                            <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                                 <option value="">Choose option</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
+                            @error('category_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="">Description</label>
-                            <textarea name="description" class="form-control" placeholder="Enter product description..."></textarea>
+                            <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Enter product description..."></textarea>
+                            @error('description')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="">Product Images</label>
-                            <input type="file" name="photos[]" class="form-control" multiple>
+                            <input type="file" name="photos[]" class="form-control @error('photos') is-invalid @enderror" multiple>
+                            @error('photos')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <input type="submit" value="Create Product" class="btn btn-primary w-100">
