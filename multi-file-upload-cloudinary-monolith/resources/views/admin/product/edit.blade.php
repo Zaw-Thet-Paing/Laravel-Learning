@@ -68,7 +68,7 @@
                             <input type="file" name="photos[]" class="form-control" multiple>
                         </div>
                         <div class="mb-3">
-                            <input type="submit" value="Create Product" class="btn btn-primary w-100">
+                            <input type="submit" value="Update Product" class="btn btn-primary w-100">
                         </div>
                     </form>
                 </div>
