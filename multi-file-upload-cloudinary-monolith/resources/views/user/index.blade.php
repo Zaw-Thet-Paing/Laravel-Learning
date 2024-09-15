@@ -7,7 +7,7 @@
             <h3>Category Lists</h3>
             <ul class="list-group">
                 @foreach ($categories as $category)
-                    <li class="list-group-item">{{ $category->name }}</li>
+                    <a href="{{ route('user.productByCategory', $category) }}" class="list-group-item">{{ $category->name }}</a>
                 @endforeach
             </ul>
         </div>
@@ -27,13 +27,13 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="" class="btn btn-primary btn-sm">See More</a>
+                                <a href="{{ route('user.productDetails', $product->id) }}" class="btn btn-primary btn-sm">See More</a>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-
+            {{ $products->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>
