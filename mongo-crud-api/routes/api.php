@@ -17,5 +17,12 @@ Route::get('/unauthorized', [AuthController::class, 'unauthorized'])->name('logi
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/posts', [PostController::class, 'index']);
+    // Route::get('/posts', [PostController::class, 'index']);
+    // Route::post('/posts', [PostController::class, 'store']);
+    // Route::get('/posts/{id}', [PostController::class, 'show']);
+    // Route::put('/posts/{id}', [PostController::class, 'update']);
+    // Route::delete('/posts/{id}', [PostController::class, 'destroy']);
+
+    Route::resource('posts', PostController::class);
+
 });
