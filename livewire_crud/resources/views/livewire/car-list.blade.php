@@ -11,6 +11,7 @@
             </div>
         </div>
         <div class="card-body">
+
             <table class="table">
                 <thead>
                     <tr>
@@ -31,8 +32,12 @@
                             <td>{{ $car->engine_capacity }}</td>
                             <td>{{ $car->fuel_type }}</td>
                             <td>
-                                <a href="/edit/car/{{ $car->id }}" wire:navigate class="btn btn-primary btn-sm">Edit</a>
-                                <button class="btn btn-danger btn-sm" wire:click="delete({{ $car->id }})" wire:confirm="Are you sure?">Delete</button>
+                                <a href="{{ route('cars.edit', $car->id) }}" wire:navigate class="btn btn-primary btn-sm" style="width:80px">Edit</a>
+                                <button class="btn btn-danger btn-sm" style="width:80px" wire:click="delete({{ $car->id }})" wire:confirm="Are you sure?">
+                                    Delete
+                                    <div class="spinner-border spinner-border-sm" wire:loading wire:target="delete({{ $car->id }})" role="status">
+                                    </div>
+                                </button>
                             </td>
                         </tr>
                     @endforeach
